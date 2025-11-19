@@ -957,6 +957,14 @@ model-viewer {
   font-size: 0.9rem;
 }
 
+.website-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  display: block;
+  background: #e8e8e8;
+}
+
 .website-card h3 {
   font-family: "Big Caslon CC", "Big Caslon", "Caslon", serif;
   font-size: clamp(1.5rem, 3vw, 1.875rem);
