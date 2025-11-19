@@ -305,6 +305,24 @@ function initStickyNav() {
   });
 }
 
+// Check if page was loaded directly (not redirected from another page)
+function isDirectLoad() {
+  // If there's no referrer, it's a direct load
+  if (!document.referrer) {
+    return true;
+  }
+  
+  // If referrer is from a different origin, it's a direct load
+  try {
+    const referrerUrl = new URL(document.referrer);
+    const currentUrl = new URL(window.location.href);
+    return referrerUrl.origin !== currentUrl.origin;
+  } catch (e) {
+    // If URL parsing fails, assume it's a direct load
+    return true;
+  }
+}
+
 // Handle navigation anchor scroll
 function handleNavAnchorScroll() {
   const navAnchor = document.getElementById('nav-anchor');
@@ -312,7 +330,7 @@ function handleNavAnchorScroll() {
 
   // Check if URL has #nav-anchor hash
   if (window.location.hash === '#nav-anchor') {
-    // Wait for page to fully load and animations to complete
+    // Wait for page to fully load
     setTimeout(() => {
       const nav = document.getElementById('sticky-nav');
       if (nav) {
@@ -325,16 +343,23 @@ function handleNavAnchorScroll() {
         });
       }
     }, 300);
+  } else {
+    // If no hash, scroll to top on page load
+    window.scrollTo({
+      top: 0,
+      behavior: 'instant'
+    });
   }
 }
 
 // Main initialization
 document.addEventListener('DOMContentLoaded', () => {
-  // Handle navigation anchor scroll first
+  // Scroll to top or nav-anchor based on hash
   handleNavAnchorScroll();
   
-  // Only run homepage animations if elements exist
-  if (document.getElementById('logo-un')) {
+  // Only run homepage animations if elements exist AND it's a direct load
+  const logoUn = document.getElementById('logo-un');
+  if (logoUn && isDirectLoad()) {
     runIntroAnimation();
   }
   
